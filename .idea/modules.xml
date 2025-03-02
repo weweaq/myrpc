@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/example-consumer/example-consumer.iml" filepath="$PROJECT_DIR$/example-consumer/example-consumer.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-provider/example-provider.iml" filepath="$PROJECT_DIR$/example-provider/example-provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/myrpc.iml" filepath="$PROJECT_DIR$/myrpc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yu-rpc-core/yu-rpc-core.iml" filepath="$PROJECT_DIR$/yu-rpc-core/yu-rpc-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/yu-rpc-easy/yu-rpc-easy.iml" filepath="$PROJECT_DIR$/yu-rpc-easy/yu-rpc-easy.iml" />
     </modules>
   </component>

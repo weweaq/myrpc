@@ -2,6 +2,8 @@ package com.yupi.yurpc.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.yupi.yurpc.RpcApplication;
+import com.yupi.yurpc.config.RpcConfig;
 import com.yupi.yurpc.model.RpcRequest;
 import com.yupi.yurpc.model.RpcResponse;
 import com.yupi.yurpc.serializer.JdkSerializer;
@@ -24,7 +26,8 @@ public class ServiceProxy implements InvocationHandler {
         try {
             byte[] bytes = serializer.serialize(rpcRequest);
             // 这里的地址为硬编码，需要通过注册中心和服务发现机制解决
-            try (HttpResponse httpResponse = HttpRequest.post("http://localhost:8080").body(bytes).execute()) {
+            RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+            try (HttpResponse httpResponse = HttpRequest.post("http://" + rpcConfig.getServerHost() +":"+ rpcConfig.getServerPort()).body(bytes).execute()) {
                 byte[] result = httpResponse.bodyBytes();
                 RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
                 return rpcResponse.getData();
