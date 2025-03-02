@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="yu-rpc-easy" />
+        <module name="example-provider" />
+        <module name="example-consumer" />
+        <module name="example-common" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="example-common" target="17" />
+      <module name="example-consumer" target="17" />
+      <module name="example-provider" target="17" />
+      <module name="yu-rpc-easy" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
