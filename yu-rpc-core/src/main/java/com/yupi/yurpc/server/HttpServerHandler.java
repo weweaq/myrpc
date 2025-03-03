@@ -1,10 +1,12 @@
 package com.yupi.yurpc.server;
 
+import com.yupi.yurpc.RpcApplication;
 import com.yupi.yurpc.model.RpcRequest;
 import com.yupi.yurpc.model.RpcResponse;
 import com.yupi.yurpc.registry.LocalRegistry;
 import com.yupi.yurpc.serializer.JdkSerializer;
 import com.yupi.yurpc.serializer.Serializer;
+import com.yupi.yurpc.serializer.SerializerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
@@ -16,7 +18,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
     @Override
     public void handle(HttpServerRequest request) {
         // 指定序列化器
-        final Serializer serializer = new JdkSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
         System.out.println("zhangwei received request: " + request.method() + " " + request.uri() + " " + request.path());
 
         // 异步处理 http 请求

@@ -8,6 +8,7 @@ import com.yupi.yurpc.model.RpcRequest;
 import com.yupi.yurpc.model.RpcResponse;
 import com.yupi.yurpc.serializer.JdkSerializer;
 import com.yupi.yurpc.serializer.Serializer;
+import com.yupi.yurpc.serializer.SerializerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -16,7 +17,8 @@ import java.lang.reflect.Method;
 public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
-        Serializer serializer = new JdkSerializer();
+        // 指定序列化器
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
         RpcRequest rpcRequest = RpcRequest.builder()
                 .serviceName(method.getDeclaringClass().getName())
                 .methodName(method.getName())
