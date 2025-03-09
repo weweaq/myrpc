@@ -1,11 +1,15 @@
 package com.yupi.yurpc.proxy;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.yupi.yurpc.RpcApplication;
 import com.yupi.yurpc.config.RpcConfig;
 import com.yupi.yurpc.model.RpcRequest;
 import com.yupi.yurpc.model.RpcResponse;
+import com.yupi.yurpc.model.ServiceMetaInfo;
+import com.yupi.yurpc.registry.Registry;
+import com.yupi.yurpc.registry.RegistryFactory;
 import com.yupi.yurpc.serializer.JdkSerializer;
 import com.yupi.yurpc.serializer.Serializer;
 import com.yupi.yurpc.serializer.SerializerFactory;
@@ -13,6 +17,7 @@ import com.yupi.yurpc.serializer.SerializerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class ServiceProxy implements InvocationHandler {
     @Override
@@ -24,12 +29,14 @@ public class ServiceProxy implements InvocationHandler {
                 .methodName(method.getName())
                 .parameterTypes(method.getParameterTypes())
                 .args(args)
+                .serviceVersion(RpcApplication.getRpcConfig().getVersion())
                 .build();
         try {
+            // 序列化
             byte[] bytes = serializer.serialize(rpcRequest);
-            // 这里的地址为硬编码，需要通过注册中心和服务发现机制解决
-            RpcConfig rpcConfig = RpcApplication.getRpcConfig();
-            try (HttpResponse httpResponse = HttpRequest.post("http://" + rpcConfig.getServerHost() +":"+ rpcConfig.getServerPort()).body(bytes).execute()) {
+            // 这里通过注册中心和服务发现机制解决
+            ServiceMetaInfo selectedService = getSelectedService(rpcRequest);
+            try (HttpResponse httpResponse = HttpRequest.post(selectedService.getServiceAddress()).body(bytes).execute()) {
                 byte[] result = httpResponse.bodyBytes();
                 RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
                 return rpcResponse.getData();
@@ -42,5 +49,19 @@ public class ServiceProxy implements InvocationHandler {
         }
         // 当 try 块中的代码抛出 IOException 或其子类异常时，进入 catch 块。由于 catch 块中没有显式的 return 语句，程序会继续执行 catch 块之后的代码，最终返回 null。
         return null;
+    }
+
+    private ServiceMetaInfo getSelectedService(RpcRequest rpcRequest) {
+        RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+        Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+        ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+        serviceMetaInfo.setServiceName(rpcRequest.getServiceName());
+        serviceMetaInfo.setServiceVersion(rpcRequest.getServiceVersion());
+        List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
+        if (CollUtil.isEmpty(serviceMetaInfoList)) {
+            throw new RuntimeException("服务不存在");
+        }
+        // 暂时取第一个
+        return serviceMetaInfoList.get(0);
     }
 }

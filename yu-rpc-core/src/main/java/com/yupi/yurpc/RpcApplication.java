@@ -1,7 +1,10 @@
 package com.yupi.yurpc;
 
+import com.yupi.yurpc.config.RegistryConfig;
 import com.yupi.yurpc.config.RpcConfig;
 import com.yupi.yurpc.constant.RpcConstant;
+import com.yupi.yurpc.registry.Registry;
+import com.yupi.yurpc.registry.RegistryFactory;
 import com.yupi.yurpc.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +14,12 @@ public class RpcApplication {
 
     public static void init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
-        log.info("RpcApplication init success, config = {}", rpcConfig.toString());
+        log.info("RpcApplication init, config = {}", rpcConfig.toString());
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        registry.init(registryConfig);
+        log.info("RpcApplication init success, registry = {}", registryConfig);
+
     }
 
     /**
