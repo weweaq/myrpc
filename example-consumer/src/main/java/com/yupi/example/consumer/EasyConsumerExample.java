@@ -20,11 +20,14 @@ public class EasyConsumerExample {
         User user = new User();
         user.setName("小黄");
         // 调用
-        User newUser = userService.getUser(user);
-        if (newUser != null) {
-            System.out.println(newUser.getName());
-        } else {
-            System.out.println("user == null");
+        for (int i = 0; i < 3; i++) {
+            System.out.println("第" + i + "次调用");
+            User newUser = userService.getUser(user);
+            if (newUser != null) {
+                System.out.println(newUser.getName());
+            } else {
+                System.out.println("user == null");
+            }
         }
     }
 }

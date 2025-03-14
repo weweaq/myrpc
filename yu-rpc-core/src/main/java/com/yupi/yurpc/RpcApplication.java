@@ -20,6 +20,8 @@ public class RpcApplication {
         registry.init(registryConfig);
         log.info("RpcApplication init success, registry = {}", registryConfig);
 
+        // 添加钩子，在程序关闭时销毁注册中心
+        Runtime.getRuntime().addShutdownHook(new Thread(registry::destroy));
     }
 
     /**
