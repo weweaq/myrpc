@@ -64,5 +64,7 @@
     <orderEntry type="library" name="Maven: io.netty:netty-codec-dns:4.1.103.Final" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.8.16" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.30" level="project" />
+    <orderEntry type="library" name="Maven: com.github.rholder:guava-retrying:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:2.0.2" level="project" />
   </component>
 </module>

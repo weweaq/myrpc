@@ -1,5 +1,6 @@
 package com.yupi.yurpc.config;
 
+import com.yupi.yurpc.fault.retry.RetryStrategyKeys;
 import com.yupi.yurpc.loadbalancer.LoadBalancerKeys;
 import com.yupi.yurpc.serializer.SerializerKeys;
 import lombok.Data;
@@ -44,5 +45,10 @@ public class RpcConfig {
      * 负载均衡方式
      */
     private String loadBalancer = LoadBalancerKeys.CONSISTENT_HASH;
+
+    /**
+     * 重试策略
+     */
+    private String retryStrategy = RetryStrategyKeys.FIXED_INTERVAL;
 }
 
