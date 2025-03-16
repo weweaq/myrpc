@@ -5,9 +5,12 @@
       <module fileurl="file://$PROJECT_DIR$/example-common/example-common.iml" filepath="$PROJECT_DIR$/example-common/example-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-consumer/example-consumer.iml" filepath="$PROJECT_DIR$/example-consumer/example-consumer.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-provider/example-provider.iml" filepath="$PROJECT_DIR$/example-provider/example-provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example-springboot-consumer/example-springboot-consumer.iml" filepath="$PROJECT_DIR$/example-springboot-consumer/example-springboot-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example-springboot-provider/example-springboot-provider.iml" filepath="$PROJECT_DIR$/example-springboot-provider/example-springboot-provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/myrpc.iml" filepath="$PROJECT_DIR$/myrpc.iml" />
       <module fileurl="file://$PROJECT_DIR$/yu-rpc-core/yu-rpc-core.iml" filepath="$PROJECT_DIR$/yu-rpc-core/yu-rpc-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/yu-rpc-easy/yu-rpc-easy.iml" filepath="$PROJECT_DIR$/yu-rpc-easy/yu-rpc-easy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yu-rpc-spring-boot-starter/yu-rpc-spring-boot-starter.iml" filepath="$PROJECT_DIR$/yu-rpc-spring-boot-starter/yu-rpc-spring-boot-starter.iml" />
     </modules>
   </component>
 </project>
