@@ -8,6 +8,8 @@ import com.yupi.yurpc.RpcApplication;
 import com.yupi.yurpc.config.RpcConfig;
 import com.yupi.yurpc.fault.retry.RetryStrategy;
 import com.yupi.yurpc.fault.retry.RetryStrategyFactory;
+import com.yupi.yurpc.fault.tolerant.TolerantStrategy;
+import com.yupi.yurpc.fault.tolerant.TolerantStrategyFactory;
 import com.yupi.yurpc.loadbalancer.LoadBalancer;
 import com.yupi.yurpc.loadbalancer.LoadBalancerFactory;
 import com.yupi.yurpc.model.RpcRequest;
@@ -35,7 +37,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ServiceProxy implements InvocationHandler {
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
+    public Object invoke(Object proxy, Method method, Object[] args)  {
         // 指定序列化器
         final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
         RpcRequest rpcRequest = RpcRequest.builder()
@@ -54,7 +56,15 @@ public class ServiceProxy implements InvocationHandler {
             // 发送 TCP 请求
             // 选择重试策略
             RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(RpcApplication.getRpcConfig().getRetryStrategy());
-            RpcResponse rpcResponse = retryStrategy.doRetry(() -> VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo));
+            RpcResponse rpcResponse = null;
+            try {
+                rpcResponse = retryStrategy.doRetry(() -> VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo));
+            } catch (Exception e) {
+                // 容错机制
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(RpcApplication.getRpcConfig().getTolerantStrategy());
+                rpcResponse = tolerantStrategy.doTolerant(new HashMap<>(), e);
+                e.printStackTrace();
+            }
             return rpcResponse.getData();
 
 
@@ -68,10 +78,6 @@ public class ServiceProxy implements InvocationHandler {
             // 测试不调用实际远程服务
 //            System.out.println("调用远程服务: " + rpcRequest.getServiceName());
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         // 当 try 块中的代码抛出 IOException 或其子类异常时，进入 catch 块。由于 catch 块中没有显式的 return 语句，程序会继续执行 catch 块之后的代码，最终返回 null。
