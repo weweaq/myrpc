@@ -1,5 +1,6 @@
 package com.yupi.yurpc.config;
 
+import com.yupi.yurpc.loadbalancer.LoadBalancerKeys;
 import com.yupi.yurpc.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -38,5 +39,10 @@ public class RpcConfig {
      * 注册中心配置
      */
     private RegistryConfig registryConfig = new RegistryConfig();
+
+    /**
+     * 负载均衡方式
+     */
+    private String loadBalancer = LoadBalancerKeys.CONSISTENT_HASH;
 }
 
